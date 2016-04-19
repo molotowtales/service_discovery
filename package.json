@@ -1,0 +1,26 @@
+{
+  "name": "service_discovery",
+  "version": "0.0.1",
+  "description": "",
+  "main": "service_discovery.js",
+  "scripts": {
+    "test": "NODE_ENVIRONMENT=test mocha tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molotowtales/service_discovery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/molotowtales/service_discovery/issues"
+  },
+  "homepage": "https://github.com/molotowtales/service_discovery#readme",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
