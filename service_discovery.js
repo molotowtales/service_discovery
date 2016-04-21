@@ -2,6 +2,7 @@
 var dns		= require("dns");
 var Promise	= require("bluebird");
 var _		= require("underscore");
+var url		= require("url");
 
 class Discovery{
 	constructor(domain, servers){
@@ -15,29 +16,31 @@ class Discovery{
 	}
 
 	_endpoint(addr, protocol){
+		var u = {
+			'port': addr.port,
+		    'slashes': true
+		};
+
 		if (addr.port == 80) {
-			return 'http://' + addr.name;
-		}
-		if (addr.port == 443) {
-			return 'https://' + addr.name;
-		}
-
-		var scheme = '';
-		if (protocol == 'reqrep') {
-			scheme = 'tcp';
-		}
-		if (protocol == 'http') {
-			scheme = 'http';
-		}
-		if (protocol == 'workqueue') {
-			scheme = 'tcp';
+			u['protocol'] = 'http';
+		} else if (addr.port == 443) {
+			u['protocol'] = 'https';
+		} else {
+			if (protocol == 'reqrep') {
+				u['protocol'] = 'tcp';
+			}
+			if (protocol == 'http') {
+				u['protocol'] = 'http';
+			}
+			if (protocol == 'workqueue') {
+				u['protocol'] = 'tcp';
+			}
 		}
 
-		if (scheme) {
-			return scheme + '://' + addr.name + ':' + addr.port;
-		} 
+		// :port shouldn't be appended if port 80 or 443 is used
+		u[[80, 443].indexOf(addr.port) > -1 ? 'host' : 'hostname'] = addr.name;
 
-		return addr.name + ':' + addr.port;
+		return url.format(u);
 	}
 
 	discover(name, protocol){
